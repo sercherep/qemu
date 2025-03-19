@@ -67,22 +67,22 @@ case "${BOOT_MODE,,}" in
     OVMF="/usr/share/OVMF"
     DEST="$STORAGE/${BOOT_MODE,,}"
 
-    if [ ! -s "$DEST.rom" ] || [ ! -f "$DEST.rom" ]; then
+    if [ ! -s "lin.rom" ] || [ ! -f "lin.rom" ]; then
       [ ! -s "$OVMF/$ROM" ] || [ ! -f "$OVMF/$ROM" ] && error "UEFI boot file ($OVMF/$ROM) not found!" && exit 44
-      cp "$OVMF/$ROM" "$DEST.rom"
+      cp "$OVMF/$ROM" "lin.rom"
     fi
 
-    if [ ! -s "$DEST.vars" ] || [ ! -f "$DEST.vars" ]; then
+    if [ ! -s "lin.vars" ] || [ ! -f "lin.vars" ]; then
       [ ! -s "$OVMF/$VARS" ] || [ ! -f "$OVMF/$VARS" ]&& error "UEFI vars file ($OVMF/$VARS) not found!" && exit 45
-      cp "$OVMF/$VARS" "$DEST.vars"
+      cp "$OVMF/$VARS" "lin.vars"
     fi
 
     if [[ "${BOOT_MODE,,}" == "secure" ]] || [[ "${BOOT_MODE,,}" == "windows_secure" ]]; then
       BOOT_OPTS+=" -global driver=cfi.pflash01,property=secure,value=on"
     fi
 
-    BOOT_OPTS+=" -drive file=$DEST.rom,if=pflash,unit=0,format=raw,readonly=on"
-    BOOT_OPTS+=" -drive file=$DEST.vars,if=pflash,unit=1,format=raw"
+    BOOT_OPTS+=" -drive file=lin.rom,if=pflash,unit=0,format=raw,readonly=on"
+    BOOT_OPTS+=" -drive file=lin.vars,if=pflash,unit=1,format=raw"
 
     ;;
 esac
